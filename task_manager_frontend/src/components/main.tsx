@@ -3,6 +3,8 @@ import { IUserInfoResponse, getUserInfoApi } from "../apis/user-api";
 import EditUserInfoForm from "./editprofile";
 import ConfirmForm from "./confirm";
 import { Addtask } from "./addtask";
+import { GetTaskFunc } from "../apis/get-task-api";
+import { ShowTask, Task } from "./showtask";
 
 
 
@@ -13,17 +15,21 @@ export const Main = () => {
   const [deleteConfirm, setDeleteConfirm] = useState(false);
   const [showprofile, setshowprofile] = useState(false)
   const [username, setUsername] = useState("");
+  const [tasksData, setTasksData] = useState<Task | null>(null);
+  const [isDataUpdated, setIsDataUpdated] = useState(false);
 
   const handleUserInfoUpdate = (username: string) => {
     setUsername(username);
+    setIsDataUpdated((prev) => !prev);
   };
 
   const showAddFormHandler = () => {
     setshowaddform(true)
     console.log("ddd");
-    
+
   }
   const showChange = () => {
+    setshowprofile(false)
     setshowform(true)
   }
   const showDeleteConfirm = () => {
@@ -47,18 +53,29 @@ export const Main = () => {
       try {
         const userData = await getUserInfoApi();
         setUserInfo(userData);
-        setUsername(userData.username);
       } catch (error) {
         console.error("Error fetching user info:", error);
       }
     };
 
     fetchUserInfo();
-  }, [userInfo?.username]);
+  }, [isDataUpdated]);
 
+  const fetchTasksInfo = async () => {
+    try {
+      const data = await GetTaskFunc();
+      setTasksData(data);
+    } catch (error) {
+      console.error("Error fetching user info:", error);
+    }
+  };
+
+  useEffect(() => {
+    fetchTasksInfo();
+  }, [isDataUpdated]);
   return (
     <>
-      <div className="flex justify-between  m-2 bg-gradient-to-r from-purple-600 to-blue-300 rounded-md text-white p-2">
+      <div className="flex md:justify-between md:flex-row  flex-col item-start gap-2  m-2 bg-gradient-to-r from-purple-600 to-blue-300 rounded-md text-white p-2">
         <div className="flex gap-1 justify-center items-center">
           {userInfo ? (
             <p>Welcome, {userInfo.username}</p>
@@ -71,17 +88,17 @@ export const Main = () => {
         </div >
         <div className="flex gap-2 justify-center items-center">
           <div className="rounded-md bg-violet-500 flex gap-1 px-2">
-          <svg className="w-6 h-6 cursor-pointer fill-white self-center" focusable="false" aria-hidden="true" viewBox="0 0 24 24" data-testid="SearchIcon"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"></path></svg>
-          <input type="search" className=" bg-violet-500 border-none focus:border-violet-500 focus:ring-0" placeholder="Search"></input>
+            <svg className="w-6 h-6 cursor-pointer fill-white self-center" focusable="false" aria-hidden="true" viewBox="0 0 24 24" data-testid="SearchIcon"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"></path></svg>
+            <input type="search" className=" bg-violet-500 border-none focus:border-violet-500 focus:ring-0" placeholder="Search"></input>
           </div>
 
           <svg className="w-6 h-6 cursor-pointer fill-white" focusable="false" aria-hidden="true" viewBox="0 0 24 24" data-testid="FilterAltIcon"><path d="M4.25 5.61C6.27 8.2 10 13 10 13v6c0 .55.45 1 1 1h2c.55 0 1-.45 1-1v-6s3.72-4.8 5.74-7.39c.51-.66.04-1.61-.79-1.61H5.04c-.83 0-1.3.95-.79 1.61z"></path></svg>
           <svg onClick={showAddFormHandler} className="w-6 h-6 cursor-pointer fill-white" focusable="false" aria-hidden="true" viewBox="0 0 24 24" data-testid="AddBoxIcon"><path d="M19 3H5c-1.11 0-2 .9-2 2v14c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-2 10h-4v4h-2v-4H7v-2h4V7h2v4h4v2z"></path></svg>
         </div>
       </div>
-      {showaddform? <Addtask  setshowaddform={setshowaddform}/>:null}
+      {showaddform ? <Addtask setshowaddform={setshowaddform} setIsDataUpdated={setIsDataUpdated} /> : null}
 
-      
+      <ShowTask tasks={tasksData} setIsDataUpdated={setIsDataUpdated} />
 
 
       {showform ? (
@@ -96,7 +113,7 @@ export const Main = () => {
 
         showprofile ? (
 
-          <div className="flex flex-col gap-2 item-center border shadow-md rounded-md p-2 z-10 w-1/4 m-1 ">
+          <div className=" fixed top-16 bg-white left-2 bg-opacity-100 flex flex-col gap-2 item-center border shadow-md rounded-md p-2 z-10 w-1/4 m-1 ">
             <p>Edit Or Delete Account</p>
             <button
               onClick={showChange}

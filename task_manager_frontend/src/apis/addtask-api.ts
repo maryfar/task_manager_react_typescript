@@ -8,7 +8,7 @@ export interface IAddBody{
 
 }
 
-interface IAuthResponse {
+interface IAddTaskResponse {
     title: string;
     description: string;
     user: {
@@ -32,7 +32,7 @@ interface IAuthResponse {
   }
   
 
-    type AddTaskApiFuncType =(body: IAddBody) =>Promise<IAuthResponse>
+    type AddTaskApiFuncType =(body: IAddBody) =>Promise<IAddTaskResponse>
     export const AddTaskApi:AddTaskApiFuncType = async(body: IAddBody) =>{
         const response = await axios.post("http://localhost:3000/task",body,{
             headers: {

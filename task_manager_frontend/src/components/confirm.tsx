@@ -23,7 +23,7 @@ const deleteUserInfo = async () => {
 
 
     return (
-      <div className="flex flex-col gap-2 item-center border shadow-md rounded-md p-2 z-10 w-1/4 m-1">
+      <div className=" fixed top-16 bg-white left-2 bg-opacity-100 flex flex-col gap-2 item-center border shadow-md rounded-md p-2 z-10 w-1/4 m-1">
         <p>Are you sure Delete This Account with this Username: {username}</p>
         <button
           onClick={deleteUserInfo}

@@ -1,15 +1,15 @@
 import { ChangeEventHandler, useState } from "react";
 import { AddTaskApi, IAddBody } from "../apis/addtask-api";
 import { AxiosError } from "axios";
-import { newsession } from "../utils/session";
+
 
 interface IDeleteUserInfoFormProps {
     setshowaddform: React.Dispatch<React.SetStateAction<boolean>>;
-    
+    setIsDataUpdated: React.Dispatch<React.SetStateAction<boolean>>
   }
 
-export const Addtask = ({setshowaddform}:IDeleteUserInfoFormProps) => {
-    const [title, setTitle] = useState("");
+export const Addtask = ({setshowaddform , setIsDataUpdated}:IDeleteUserInfoFormProps) => {
+  const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
 
     const cancelAddTask=()=>{
@@ -33,8 +33,9 @@ export const Addtask = ({setshowaddform}:IDeleteUserInfoFormProps) => {
         try {
           const response = await AddTaskApi(body);
           console.log(response.user.tasks);
-          const firstSession = response.user.sessions[0].token;
-          newsession.setAccessToken(firstSession);
+          setIsDataUpdated((prev) => !prev);
+
+        
         } catch (error) {
           const err = error as AxiosError;
           console.log(err);
@@ -44,8 +45,8 @@ export const Addtask = ({setshowaddform}:IDeleteUserInfoFormProps) => {
 
     return (
       <div className="fixed inset-0 items-center justify-center">
-        <div className=" w-full h-full bg-gray-900 opacity-80 flex items-center justify-center">
-          <div className="bg-white w-1/2 md:max-w-md mx-auto rounded shadow-lg overflow-y-auto z-50 opacity-100">
+        <div className=" w-full h-full bg-gray-900 opacity-90 flex items-center justify-center">
+          <div className="bg-white w-1/2 md:max-w-md mx-auto rounded shadow-lg overflow-y-auto z-50 opacity-100  bg-opacity-100">
             <form className="py-4 text-left px-6">
               <h2 className="text-2xl font-semibold mb-4">Add Task</h2>
               <div className="mb-4">
