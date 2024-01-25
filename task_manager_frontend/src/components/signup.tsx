@@ -1,26 +1,31 @@
-import {  useState } from "react";
+
 import { Link, useNavigate } from "react-router-dom";
 import { ISignupBody, SignUpApi } from "../apis/auth-apis";
 import { newsession } from "../utils/session";
 import { AxiosError } from "axios";
-import { ChangeEventHandler } from "react";
+import { useForm, SubmitHandler } from "react-hook-form";
+import * as yup from "yup";
+import { yupResolver } from "@hookform/resolvers/yup";
+
+const Schema = yup.object().shape({
+  username: yup.string().required("Username is required").min(8),
+  password: yup.string().required("Password is required").min(8).max(15)
+  .matches(/[a-zA-Z]+/, "Password must contain at least one letter")
+  .matches(/[!@#$%^&*]+/, "Password must contain at least one special character !@#$%^&*")
+  .matches(/[A-Z]+/, "Password must contain at least one uppercase letter")
+});
+
+type SignUpFormValues = {
+  username: string;
+  password: string;
+};
 
 export const SignUpForm = () => {
-  const [username, setUsername] = useState("");
-  const [password, setPassword] = useState("");
   const navigate = useNavigate();
-
-  const onChengeUsername: ChangeEventHandler<HTMLInputElement> = (e) => {
-    setUsername(e.target.value);
-  };
-
-  const onChangePassword: ChangeEventHandler<HTMLInputElement> = (e) => {
-    setPassword(e.target.value);
-  };
-
-  const handleSignup = async (e: React.FormEvent) => {
-    e.preventDefault(); 
-
+  const { register, handleSubmit, formState: { errors }, getValues } = useForm<SignUpFormValues>({ resolver: yupResolver(Schema) });
+  
+  const handleSignUp: SubmitHandler<SignUpFormValues> = async () => {
+    const { username, password } = getValues();
     const body: ISignupBody = {
       username: username,
       password: password,
@@ -28,8 +33,6 @@ export const SignUpForm = () => {
     try {
       const response = await SignUpApi(body);
       console.log(response);
-
-     
       newsession.setAccessToken(response.token);
       navigate("/main");
     } catch (error) {
@@ -56,22 +59,20 @@ export const SignUpForm = () => {
   
           <div className="mt-8 sm:mx-auto sm:w-full sm:max-w-md">
             <div className="bg-white py-8 px-4 shadow sm:rounded-lg sm:px-10">
-              <form className="space-y-6" action="#" method="POST" onSubmit={handleSignup}>
+              <form onSubmit ={handleSubmit(handleSignUp)} className="space-y-6" action="#" method="POST" >
                 <div>
                   <label htmlFor="username" className="block text-sm font-medium text-gray-700">
                     User Name
                   </label>
                   <div className="mt-1">
                     <input
-                      id="username"
-                      name="username"
-                      value={username}
-                      onChange={onChengeUsername}
+                      {...register("username")}
                       type="text"
                       autoComplete="username"
                       required
                       className="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
                     />
+                    {errors.username && <p className="text-red-500 text-sm ml-2">{errors.username.message}</p>}
                   </div>
                 </div>
   
@@ -82,14 +83,13 @@ export const SignUpForm = () => {
                   <div className="mt-1">
                     <input
                       id="password"
-                      name="password"
-                      value={password}
-                      onChange={onChangePassword}
+                      {...register("password")}
                       type="password"
                       autoComplete="current-password"
                       required
                       className="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
                     />
+                     {errors.password && <p className="text-red-500 text-sm ml-2">{errors.password.message}</p>}
                   </div>
                 </div>
   

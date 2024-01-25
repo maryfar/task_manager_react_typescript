@@ -91,9 +91,7 @@ export const ShowTask = ({ tasks, setIsDataUpdated }: { tasks: Task[] | null; se
                     </td>
                     <td> { task.isCompleted ? <span className="bg-emerald-500 text-white rounded-lg px-2 py-1" >Done</span>: <span className="bg-red-400 text-white rounded-lg px-2 py-1">Inprogress</span>}</td>
                     <td className="relative whitespace-nowrap py-4 pl-3 pr-4 text-right text-sm font-medium sm:pr-6  gap-2 flex">
-                      <a href="#" className="text-indigo-600 hover:text-indigo-900">
-                        Edit<span className="sr-only">, {task.title}</span>
-                      </a>
+                     
                       <a href="#" className="text-indigo-600 hover:text-indigo-900" onClick={() => handleDeleteTask(task.id)}>
                         Delete<span className="sr-only">, {task.title}</span>
                       </a>

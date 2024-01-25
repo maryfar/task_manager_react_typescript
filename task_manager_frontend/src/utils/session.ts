@@ -1,4 +1,4 @@
-export class Session {
+class Session {
   private tokenKey: string = "sneaker-storage-access-token";
   public token: string | null = null;
 
