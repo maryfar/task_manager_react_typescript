@@ -60,7 +60,7 @@ const handelEdit = async(e:React.FormEvent) =>{
   }
 
   return (
-    <form className="fixed top-16 bg-white left-2 bg-opacity-100 flex flex-col gap-2 item-center border shadow-md rounded-md p-2 z-10 w-1/4 m-1 " action="#" method="POST" onSubmit={handelEdit}>
+    <form className="fixed top-16 bg-slate-200   left-2 bg-opacity-100 flex flex-col gap-3 item-center border shadow-md rounded-md p-6 z-10 w-1/4 m-1 " action="#" method="POST" onSubmit={handelEdit}>
       <div>
         <label htmlFor="username" className="block text-sm font-medium text-gray-700">
           User Name

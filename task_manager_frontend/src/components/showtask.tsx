@@ -76,9 +76,9 @@ export const ShowTask = ({ tasks, setIsDataUpdated }: { tasks: Task[] | null; se
               <tbody className="divide-y divide-gray-200 bg-white">
                 {tasks.map((task) => (
                   <tr key={task.id}>
-                    <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">{task.title}</td>
-                    <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">{task.description}</td>
-                    <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
+                    <td className="whitespace-nowrap px-3 py-3.5 text-sm text-gray-500">{task.title}</td>
+                    <td className="whitespace-nowrap px-3 py-3.5 text-sm text-gray-500">{task.description}</td>
+                    <td className="whitespace-nowrap px-3 py-3.5 text-sm text-gray-500">
                       <input
                         type="checkbox"
                         checked={task.isCompleted}
@@ -92,7 +92,7 @@ export const ShowTask = ({ tasks, setIsDataUpdated }: { tasks: Task[] | null; se
                     <td> { task.isCompleted ? <span className="bg-emerald-500 text-white rounded-lg px-2 py-1" >Done</span>: <span className="bg-red-400 text-white rounded-lg px-2 py-1">Inprogress</span>}</td>
                     <td className="relative whitespace-nowrap py-4 pl-3 pr-4 text-right text-sm font-medium sm:pr-6  gap-2 flex">
                      
-                      <a href="#" className="text-indigo-600 hover:text-indigo-900" onClick={() => handleDeleteTask(task.id)}>
+                      <a href="#" className="text-indigo-800 hover:text-indigo-900" onClick={() => handleDeleteTask(task.id)}>
                         Delete<span className="sr-only">, {task.title}</span>
                       </a>
                     </td>

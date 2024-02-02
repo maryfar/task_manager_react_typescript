@@ -1,6 +1,7 @@
 import axios from "axios";
 import { newsession } from "../utils/session";
-import { tasks } from "../components/showtask";
+import { Task } from "../components/showtask";
+
 
 export interface ITaskResponse{
     id: number;
@@ -15,7 +16,7 @@ export interface ITaskResponse{
 
 }
 
-type GetTaskFuncType = () => Promise<tasks>
+type GetTaskFuncType = () => Promise<Task>
 export const GetTaskFunc:GetTaskFuncType = async ()=>{
     const response = await axios.get("http://localhost:3000/user",{headers:{Authorization:`Bearer ${newsession.token}`}});
     return response.data.tasks

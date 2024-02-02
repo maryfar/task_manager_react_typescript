@@ -3,8 +3,9 @@ import { IUserInfoResponse, getUserInfoApi } from "../apis/user-api";
 import EditUserInfoForm from "./editprofile";
 import ConfirmForm from "./confirm";
 import { Addtask } from "./addtask";
-import { GetTaskFunc } from "../apis/get-task-api";
+import { GetTaskFunc} from "../apis/get-task-api";
 import { ShowTask, Task } from "./showtask";
+import { newsession } from "../utils/session";
 
 
 
@@ -15,7 +16,7 @@ export const Main = () => {
   const [deleteConfirm, setDeleteConfirm] = useState(false);
   const [showprofile, setshowprofile] = useState(false)
   const [username, setUsername] = useState("");
-  const [tasksData, setTasksData] = useState<Task | null>(null);
+  const [tasksData, setTasksData] = useState<Task[] | null>([]);
   const [isDataUpdated, setIsDataUpdated] = useState(false);
 
   const handleUserInfoUpdate = (username: string) => {
@@ -46,6 +47,12 @@ export const Main = () => {
 
   }
 
+  const logOutOperation =()=>{
+    newsession.logout();
+     window.location.href = "/";
+
+  }
+
 
 
   useEffect(() => {
@@ -63,8 +70,9 @@ export const Main = () => {
 
   const fetchTasksInfo = async () => {
     try {
-      const data = await GetTaskFunc();
-      setTasksData(data);
+      const tasks = await GetTaskFunc();
+      // @ts-ignore
+    setTasksData(tasks);
     } catch (error) {
       console.error("Error fetching user info:", error);
     }
@@ -113,19 +121,25 @@ export const Main = () => {
 
         showprofile ? (
 
-          <div className=" fixed top-16 bg-white left-2 bg-opacity-100 flex flex-col gap-2 item-center border shadow-md rounded-md p-2 z-10 w-1/4 m-1 ">
-            <p>Edit Or Delete Account</p>
+          <div className=" fixed top-16 font-semibold bg-slate-200 left-2 bg-opacity-100 flex flex-col gap-2 item-center border shadow-md rounded-md p-5 z-10 w-1/4 m-1 ">
+            <p>Please select the operation you want:</p>
             <button
               onClick={showChange}
-              className="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+              className="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-indigo-400 hover:bg-indigo-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
             >
               Edit User Info
             </button>
             <button
               onClick={showDeleteConfirm}
-              className="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-red-500 hover:bg-red-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500"
+              className="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-red-400 hover:bg-red-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500"
             >
               Delete This Account
+            </button>
+            <button
+              onClick={logOutOperation}
+              className="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-yellow-400 hover:bg-yellow-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-yellow-500"
+            >
+              Log Out
             </button>
           </div>
         ) : null

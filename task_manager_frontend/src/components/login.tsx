@@ -2,10 +2,13 @@
 import { Link, useNavigate } from "react-router-dom";
 import { ILoginBody, LoginApi } from "../apis/auth-apis";
 import { newsession } from "../utils/session";
-import { AxiosError } from "axios";
 import { useForm, SubmitHandler } from "react-hook-form";
 import * as yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
+import { ErrorToast } from "./error";
+import { useState } from "react";
+
+let err:string[] | string;
 
 const Schema = yup.object().shape({
   username: yup.string().required("Username is required").min(8),
@@ -20,7 +23,7 @@ type LoginFormValues = {
 export const LoginForm = () => {
   const navigate = useNavigate();
   const { register, handleSubmit, formState: { errors }, getValues } = useForm<LoginFormValues>({ resolver: yupResolver(Schema) });
-
+  const [showtoast,setShowToast] = useState(false)
   const handleLogin: SubmitHandler<LoginFormValues> = async () => {
     const { username, password } = getValues();
   
@@ -34,13 +37,19 @@ export const LoginForm = () => {
       newsession.setAccessToken(response.token);
       navigate("/main");
     } catch (error) {
-      const err = error as AxiosError;
-      console.log(err);
+      const errors = error as any;
+      err= (errors.response?.data).message || null
+      setShowToast(true)
+      console.log(errors);
+      
     }
   };
 
 
   return (
+    <>
+    {err ?<ErrorToast errorsList={err}  showtoast={showtoast}  setShowToast={setShowToast}/>:null}
+    
 
     <div className="min-h-full flex flex-col justify-center py-12 sm:px-6 lg:px-8">
       <div className="sm:mx-auto sm:w-full sm:max-w-md">
@@ -122,6 +131,7 @@ export const LoginForm = () => {
       </div>
     </div>
 
+    </>
   )
 }
 

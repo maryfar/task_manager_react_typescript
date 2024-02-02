@@ -45,7 +45,7 @@ export const Addtask = ({setshowaddform , setIsDataUpdated}:IDeleteUserInfoFormP
 
     return (
       <div className="fixed inset-0 items-center justify-center">
-        <div className=" w-full h-full bg-gray-900 opacity-90 flex items-center justify-center">
+        <div className=" w-full h-full bg-gray-900 opacity-95 flex items-center justify-center">
           <div className="bg-white w-1/2 md:max-w-md mx-auto rounded shadow-lg overflow-y-auto z-50 opacity-100  bg-opacity-100">
             <form className="py-4 text-left px-6">
               <h2 className="text-2xl font-semibold mb-4">Add Task</h2>
@@ -88,3 +88,32 @@ export const Addtask = ({setshowaddform , setIsDataUpdated}:IDeleteUserInfoFormP
         </div>
     );
   };
+
+
+
+
+
+
+
+
+
+  // const renderPagination = () => {
+  //   return (
+  //     <div className="flex justify-center mt-4">
+  //       <button
+  //         onClick={() => setCurrentPage(currentPage - 1)}
+  //         disabled={currentPage === 1}
+  //         className="bg-gray-300 hover:bg-gray-400 text-gray-800 font-bold py-2 px-4 rounded-l"
+  //       >
+  //         Previous
+  //       </button>
+  //       <button
+  //         onClick={() => setCurrentPage(currentPage + 1)}
+  //         disabled={currentPage === totalPages}
+  //         className="bg-gray-300 hover:bg-gray-400 text-gray-800 font-bold py-2 px-4 rounded-r"
+  //       >
+  //         Next
+  //       </button>
+  //     </div>
+  //   );
+  // };
